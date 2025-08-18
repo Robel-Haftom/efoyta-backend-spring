@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Efoyta",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
