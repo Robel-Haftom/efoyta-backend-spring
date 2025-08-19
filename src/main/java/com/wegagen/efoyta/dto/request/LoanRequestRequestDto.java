@@ -22,6 +22,9 @@ public class LoanRequestRequestDto {
 
     private String remark;
 
+    @NotNull(message = "Business line is required", groups = {OnCreate.class})
+    private String businessLine;
+
     @NotNull(message = "Answer this question", groups = {OnCreate.class})
     private Boolean haveYouVisitedTheBusinessAddress;
 
@@ -29,7 +32,7 @@ public class LoanRequestRequestDto {
     private Boolean isBusinessAddressComfortableForFollowUp;
 
     @NotNull(message = "Choose the loan product type", groups = {OnCreate.class})
-    private UUID loanProductID;
+    private UUID loanProductId;
 
     @NotNull(message = "Choose the loan product type")
     private String requestStatus;
@@ -38,7 +41,7 @@ public class LoanRequestRequestDto {
     private CustomerRequestDto customer;
 
     @NotNull(message = "Choose the loan product type")
-    private Integer requestingBranchCode;
+    private String requestingBranchName;
 
     @NotNull(message = "Customer detail is required", groups = {OnCreate.class})
     private String requestingBranchSenderName;

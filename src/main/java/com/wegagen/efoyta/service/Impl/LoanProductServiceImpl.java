@@ -7,7 +7,6 @@ import com.wegagen.efoyta.entity.LoanProduct;
 import com.wegagen.efoyta.exception.ResourceExistsException;
 import com.wegagen.efoyta.exception.ResourceNotFoundException;
 import com.wegagen.efoyta.mapper.LoanProductMapper;
-import com.wegagen.efoyta.mapper.LoanRequestMapper;
 import com.wegagen.efoyta.repository.LoanProductRepository;
 import com.wegagen.efoyta.service.LoanProductService;
 import lombok.RequiredArgsConstructor;

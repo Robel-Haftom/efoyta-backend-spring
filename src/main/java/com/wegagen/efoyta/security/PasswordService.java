@@ -1,4 +1,4 @@
-package com.wegagen.efoyta.utils;
+package com.wegagen.efoyta.security;
 
 import org.springframework.stereotype.Service;
 

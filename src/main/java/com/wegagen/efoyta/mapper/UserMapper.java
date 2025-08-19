@@ -5,8 +5,9 @@ import com.wegagen.efoyta.entity.User;
 
 public class UserMapper {
 
-    public static LoginResponseDto mapToLoginResponseDto(User user){
+    public static LoginResponseDto mapToLoginResponseDto(User user, String token){
         return new LoginResponseDto(
+                user.getUsername(),
                 user.getFullName(),
                 user.getEmployeeName(),
                 user.getAccountType(),
@@ -16,7 +17,8 @@ public class UserMapper {
                 user.getPositionId(),
                 user.getWorkstationId(),
                 user.getPosition(),
-                user.getClusterName()
+                user.getClusterName(),
+                token
         );
     }
 }

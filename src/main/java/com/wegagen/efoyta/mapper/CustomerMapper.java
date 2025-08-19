@@ -15,7 +15,7 @@ public class CustomerMapper {
                 .phoneNumber(requestDto.getPhoneNumber())
                 .accountNumber(requestDto.getAccountNumber())
                 .accountBranch(requestDto.getAccountBranch())
-                .gender(Gender.valueOf(requestDto.getGender()))
+                .gender(Gender.valueOf(requestDto.getGender().toUpperCase()))
                 .build();
     }
 

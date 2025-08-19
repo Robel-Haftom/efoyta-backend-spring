@@ -15,13 +15,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping()
-    public ResponseEntity<String> countUsers(){
-        return ResponseEntity.ok(authService.countUsers());
-    }
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto){
         return ResponseEntity.ok(authService.login(requestDto));
+    }
+
+    @GetMapping()
+    public ResponseEntity<String> count(){
+        return ResponseEntity.ok(authService.count());
     }
 }

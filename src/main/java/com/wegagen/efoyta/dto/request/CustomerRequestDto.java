@@ -33,7 +33,10 @@ public class CustomerRequestDto {
     private String phoneNumber;
 
     @NotNull(message = "Customer gender is required", groups = {OnCreate.class})
-    @Pattern(regexp = "MALE|FEMALE", message = "Gender must be either MALE or FEMALE")
+    @Pattern(
+            regexp = "(?i)^(M|F|MALE|FEMALE)$",
+            message = "Gender must be M, F, MALE or FEMALE"
+    )
     private String gender;
 
 }

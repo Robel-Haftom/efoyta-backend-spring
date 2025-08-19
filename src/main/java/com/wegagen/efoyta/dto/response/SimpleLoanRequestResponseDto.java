@@ -1,10 +1,13 @@
 package com.wegagen.efoyta.dto.response;
 
+import java.util.List;
+
 public record SimpleLoanRequestResponseDto(
      String loanRequestId,
-     String remark,
+     List<RemarkResponseDto> remarkResponseDto,
+     String businessLine,
      String requestStatus,
-     Integer requestingBranchCode,
+     String requestingBranchName,
      String requestingBranchSenderName,
      String createdAt,
      String updatedAt

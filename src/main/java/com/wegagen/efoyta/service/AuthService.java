@@ -7,5 +7,5 @@ import jakarta.validation.Valid;
 public interface AuthService {
     LoginResponseDto login(LoginRequestDto requestDto);
 
-    String countUsers();
+    String count();
 }

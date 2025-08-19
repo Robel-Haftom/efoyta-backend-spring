@@ -1,51 +1,55 @@
-package com.wegagen.efoyta.mapper;
+    package com.wegagen.efoyta.mapper;
 
-import com.wegagen.efoyta.dto.request.LoanRequestRequestDto;
-import com.wegagen.efoyta.dto.response.LoanRequestResponseDto;
-import com.wegagen.efoyta.dto.response.SimpleCustomerResponseDto;
-import com.wegagen.efoyta.dto.response.SimpleLoanProductResponseDto;
-import com.wegagen.efoyta.dto.response.SimpleLoanRequestResponseDto;
-import com.wegagen.efoyta.entity.LoanRequest;
+    import com.wegagen.efoyta.dto.request.LoanRequestRequestDto;
+    import com.wegagen.efoyta.dto.response.LoanRequestResponseDto;
+    import com.wegagen.efoyta.dto.response.SimpleCustomerResponseDto;
+    import com.wegagen.efoyta.dto.response.SimpleLoanProductResponseDto;
+    import com.wegagen.efoyta.dto.response.SimpleLoanRequestResponseDto;
+    import com.wegagen.efoyta.entity.LoanRequest;
 
-public class LoanRequestMapper {
+    import java.time.format.DateTimeFormatter;
 
-    public static LoanRequest mapToLoanRequestEntity(LoanRequestRequestDto requestDto){
-        return LoanRequest.builder()
-                .remark(requestDto.getRemark())
-                .haveYouVisitedTheBusinessAddress(requestDto.getHaveYouVisitedTheBusinessAddress())
-                .isBusinessAddressComfortableForFollowUp(requestDto.getIsBusinessAddressComfortableForFollowUp())
-                .requestingBranchCode(requestDto.getRequestingBranchCode())
-                .requestingBranchSenderName(requestDto.getRequestingBranchSenderName())
-                .build();
+    public class LoanRequestMapper {
 
-        //todo remove the sender name and branch code after implementing the security
+        public static LoanRequest mapToLoanRequestEntity(LoanRequestRequestDto requestDto){
+            return LoanRequest.builder()
+                    .businessLine(requestDto.getBusinessLine())
+                    .haveYouVisitedTheBusinessAddress(requestDto.getHaveYouVisitedTheBusinessAddress())
+                    .isBusinessAddressComfortableForFollowUp(requestDto.getIsBusinessAddressComfortableForFollowUp())
+                    .requestingBranchName(requestDto.getRequestingBranchName())
+                    .requestingBranchSenderName(requestDto.getRequestingBranchSenderName())
+                    .build();
+
+            //todo remove the sender name and branch code after implementing the security
+        }
+
+        public static LoanRequestResponseDto mapToLoanRequestResponseDto(LoanRequest loanRequest){
+            return new LoanRequestResponseDto(
+                    loanRequest.getLoanRequestId().toString(),
+                    loanRequest.getRemarks().stream().map(RemarkMapper::mapToRemarkResponseDto).toList(),
+                    loanRequest.getBusinessLine(),
+                    loanRequest.getHaveYouVisitedTheBusinessAddress(),
+                    loanRequest.getIsBusinessAddressComfortableForFollowUp(),
+                    loanRequest.getRequestStatus().toString(),
+                    loanRequest.getRequestingBranchName(),
+                    loanRequest.getRequestingBranchSenderName(),
+                    LoanProductMapper.mapToSimpleLoanProductResponse(loanRequest.getLoanProduct()),
+                    CustomerMapper.mapToSimpleCustomerResponseDto(loanRequest.getCustomer()),
+                    loanRequest.getCreatedAt().format(DateTimeFormatter.ofPattern("MMM-dd-yyyy")),
+                    loanRequest.getUpdatedAt().format(DateTimeFormatter.ofPattern("MMM-dd-yyyy"))
+                    );
+        }
+
+        public static SimpleLoanRequestResponseDto mapToSimpleLoanRequestResponseDto(LoanRequest loanRequest){
+            return new SimpleLoanRequestResponseDto(
+                    loanRequest.getLoanRequestId().toString(),
+                    loanRequest.getRemarks().stream().map(RemarkMapper::mapToRemarkResponseDto).toList(),
+                    loanRequest.getBusinessLine(),
+                    loanRequest.getRequestStatus().toString(),
+                    loanRequest.getRequestingBranchName(),
+                    loanRequest.getRequestingBranchSenderName(),
+                    loanRequest.getCreatedAt().toString(),
+                    loanRequest.getUpdatedAt().toString()
+                    );
+        }
     }
-
-    public static LoanRequestResponseDto mapToLoanRequestResponseDto(LoanRequest loanRequest){
-        return new LoanRequestResponseDto(
-                loanRequest.getLoanRequestId().toString(),
-                loanRequest.getRemark(),
-                loanRequest.getHaveYouVisitedTheBusinessAddress(),
-                loanRequest.getIsBusinessAddressComfortableForFollowUp(),
-                loanRequest.getRequestStatus().toString(),
-                loanRequest.getRequestingBranchCode(),
-                loanRequest.getRequestingBranchSenderName(),
-                LoanProductMapper.mapToSimpleLoanProductResponse(loanRequest.getLoanProduct()),
-                CustomerMapper.mapToSimpleCustomerResponseDto(loanRequest.getCustomer()),
-                loanRequest.getCreatedAt().toString(),
-                loanRequest.getUpdatedAt().toString()
-                );
-    }
-
-    public static SimpleLoanRequestResponseDto mapToSimpleLoanRequestResponseDto(LoanRequest loanRequest){
-        return new SimpleLoanRequestResponseDto(
-                loanRequest.getLoanRequestId().toString(),
-                loanRequest.getRemark(),
-                loanRequest.getRequestStatus().toString(),
-                loanRequest.getRequestingBranchCode(),
-                loanRequest.getRequestingBranchSenderName(),
-                loanRequest.getCreatedAt().toString(),
-                loanRequest.getUpdatedAt().toString()
-                );
-    }
-}

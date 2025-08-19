@@ -1,6 +1,7 @@
 package com.wegagen.efoyta.dto.response;
 
 public record LoginResponseDto(
+         String userName,
          String fullName,
          String employeeName,
          String accountType,
@@ -10,5 +11,6 @@ public record LoginResponseDto(
          String positionId,
          String workstationId,
          String position,
-         String clusterName
+         String clusterName,
+         String token
 ) {}
