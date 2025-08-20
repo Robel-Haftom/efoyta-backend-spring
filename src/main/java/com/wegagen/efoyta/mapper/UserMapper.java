@@ -10,6 +10,7 @@ public class UserMapper {
                 user.getUsername(),
                 user.getFullName(),
                 user.getEmployeeName(),
+                user.getRole(),
                 user.getAccountType(),
                 user.getBranchCode(),
                 user.getWorkUnit(),

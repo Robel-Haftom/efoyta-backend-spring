@@ -38,12 +38,14 @@ public class AuthServiceImpl implements AuthService {
                     String employeeName = (String) row.get("EmployeeName");
                     String workUnit = (String) row.get("workunit");
                     String workStationId = row.get("workstation_id").toString();
+                    String role = row.get("Role").toString();
 
                     Map<String, String> claims = new HashMap<>();
                     claims.put("fullName", fullName);
                     claims.put("employeeNAme", employeeName);
                     claims.put("workUnit", workStationId);
                     claims.put("workStationId", workStationId);
+                    claims.put("role", role);
 
                     if (!passwordService.verifyPassword(requestDto.getPassword(), storedHash, storedSalt)) {
                         throw new InvalidCredentialsException("Invalid username or password");
@@ -54,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
                             userName,
                             fullName,
                             employeeName,
+                            role,
                             row.get("Account_type") == null ? null : row.get("Account_type").toString(),
                             row.get("BRANCH_CODE") == null ? null : row.get("BRANCH_CODE").toString(),
                             workUnit,

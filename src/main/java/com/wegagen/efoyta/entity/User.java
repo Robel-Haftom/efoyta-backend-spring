@@ -17,6 +17,7 @@ public class User {
     @Id
     @Column(name = "Username")
     private String username;
+    private String role;
 
     private String hash;
     private String salt;

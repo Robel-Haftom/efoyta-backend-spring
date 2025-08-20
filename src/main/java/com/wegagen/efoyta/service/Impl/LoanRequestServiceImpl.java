@@ -18,6 +18,7 @@ import com.wegagen.efoyta.repository.RemarkRepository;
 import com.wegagen.efoyta.service.LoanRequestService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,10 +35,18 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     private final RemarkRepository remarkRepository;
 
     @Override
-    public List<LoanRequestResponseDto> getAllLoanRequests() {
-        List<LoanRequest> allLoanRequests = loanRequestRepository.findAll();
+    public Page<LoanRequestResponseDto> getAllLoanRequests(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
-        return allLoanRequests.stream().map(LoanRequestMapper::mapToLoanRequestResponseDto).toList();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<LoanRequest> allLoanRequests = loanRequestRepository.findAll(pageable);
+
+        List<LoanRequestResponseDto> allLoanRequestResponses = allLoanRequests.getContent().stream()
+                .map(LoanRequestMapper::mapToLoanRequestResponseDto).toList();
+
+        return new PageImpl<>(allLoanRequestResponses, pageable, allLoanRequests.getTotalElements());
     }
 
     @Override
@@ -62,13 +71,16 @@ public class LoanRequestServiceImpl implements LoanRequestService {
                             Customer savedCustomer = customerRepository.save(customer);
                             loanRequest.setCustomer(savedCustomer);
                         });
-        Remark remark = Remark.builder()
-                .remarkText(requestDto.getRemark())
-                .author(requestDto.getRequestingBranchSenderName())
-                .loanRequest(loanRequest)
-                .build();
 
+        if (Objects.nonNull(requestDto.getRemark()) && !Strings.isBlank(requestDto.getRemark())) {
+            Remark remark = Remark.builder()
+                    .remarkText(requestDto.getRemark())
+                    .author(requestDto.getRequestingBranchSenderName())
+                    .loanRequest(loanRequest)
+                    .build();
         loanRequest.getRemarks().add(remark);
+        }
+
         loanRequest.setLoanProduct(loanProduct);
         LoanRequest savedLoanRequest = loanRequestRepository.save(loanRequest);
 
@@ -90,6 +102,9 @@ public class LoanRequestServiceImpl implements LoanRequestService {
             if(Objects.nonNull(requestDto.getCustomer().getGender()) && !Strings.isBlank(requestDto.getCustomer().getGender())){
                 existingLoanRequest.getCustomer().setGender(Gender.valueOf(requestDto.getCustomer().getGender().toUpperCase()));
             }
+        }
+        if(Objects.nonNull(requestDto.getBusinessLine()) && !Strings.isBlank(requestDto.getBusinessLine())){
+            existingLoanRequest.setBusinessLine(requestDto.getBusinessLine());
         }
         if(Objects.nonNull(requestDto.getLoanProductId()) && !Strings.isBlank(requestDto.getLoanProductId().toString())){
             LoanProduct loanProduct = loanProductRepository.findByLoanProductId(requestDto.getLoanProductId())
@@ -118,6 +133,21 @@ public class LoanRequestServiceImpl implements LoanRequestService {
         LoanRequest updatedLoanRequest = loanRequestRepository.save(existingLoanRequest);
 
         return LoanRequestMapper.mapToLoanRequestResponseDto(updatedLoanRequest);
+    }
+
+    @Override
+    public Page<LoanRequestResponseDto>  getLoanRequestByUser(String userFullName, int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<LoanRequest> allLoanRequests =  loanRequestRepository.findByRequestingBranchSenderName(userFullName, pageable);;
+
+        List<LoanRequestResponseDto> allLoanRequestResponses = allLoanRequests.getContent().stream()
+                .map(LoanRequestMapper::mapToLoanRequestResponseDto).toList();
+
+        return new PageImpl<>(allLoanRequestResponses, pageable, allLoanRequests.getTotalElements());
     }
 
 }

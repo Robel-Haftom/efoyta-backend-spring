@@ -4,6 +4,7 @@ public record LoginResponseDto(
          String userName,
          String fullName,
          String employeeName,
+         String role,
          String accountType,
          String branchCode,
          String workUnit,
